@@ -15,6 +15,8 @@ AsyncCompatibilityKit even marks all of its added APIs as deprecated when integr
 
 However, it’s important to point out that the implementations provided by AsyncCompatibilityKit might not perfectly match their system equivalents in terms of behavior, since those system implementations are closed-source and private to Apple. No reverse engineering was involved in writing this library. Instead, each of the included APIs are complete reimplementations of the system APIs that they’re intended to match. It’s therefore strongly recommended that you thoroughly test any code that uses these backported versions before deploying that code to production.
 
+To learn more about the techniques used to implement these backports, and Swift Concurrency in general, check out [Discover Concurrency over on Swift by Sundell](https://swiftbysundell.com/discover/concurrency).
+
 ## Installation
 
 AsyncCompatibilityKit is distributed using the [Swift Package Manager](https://swift.org/package-manager). To install it, use Xcode’s `File > Add Packages...` menu command to add it to your iOS app project.
