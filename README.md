@@ -27,7 +27,7 @@ import AsyncCompatibilityKit
 
 For more information on how to use the Swift Package Manager, check out [this article](https://www.swiftbysundell.com/articles/managing-dependencies-using-the-swift-package-manager), or [its official documentation](https://swift.org/package-manager).
 
-Please note that AsyncCompatibilityKit is not meant to be integrated into targets other than iOS app projects with a minimum deployment target of iOS 13 or above.
+Please note that AsyncCompatibilityKit is not meant to be integrated into targets other than iOS app projects with a minimum deployment target of iOS 13 or above. It also requires Xcode 13.2 or later.
 
 ## Support and contributions
 
