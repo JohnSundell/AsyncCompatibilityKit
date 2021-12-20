@@ -39,7 +39,14 @@ final class ViewTests: XCTestCase {
     func testTaskIsCancelledWhenViewDisappears() {
         class Coordinator: ObservableObject {
             @Published private(set) var showTaskView = true
+            @Published private(set) var taskViewDidUpdate = false
             @Published var taskError: Error?
+
+            func updateTaskViewAfterDelay() {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    self.taskViewDidUpdate = true
+                }
+            }
 
             func hideTaskViewAfterDelay() {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -53,7 +60,7 @@ final class ViewTests: XCTestCase {
 
             var body: some View {
                 if coordinator.showTaskView {
-                    Color.clear
+                    Text(coordinator.taskViewDidUpdate ? "Updated" : "Not updated")
                         .task {
                             do {
                                 // Make the task wait for 10 seconds, which will
@@ -65,6 +72,7 @@ final class ViewTests: XCTestCase {
                             }
                         }
                         .onAppear {
+                            coordinator.updateTaskViewAfterDelay()
                             coordinator.hideTaskViewAfterDelay()
                         }
                 }

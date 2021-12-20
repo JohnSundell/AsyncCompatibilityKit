@@ -18,16 +18,29 @@ public extension View {
         priority: TaskPriority = .userInitiated,
         _ action: @escaping () async -> Void
     ) -> some View {
-        var task: Task<Void, Never>?
+        modifier(TaskModifier(
+            priority: priority,
+            action: action
+        ))
+    }
+}
 
-        return onAppear {
-            task = Task(priority: priority) {
-                await action()
+private struct TaskModifier: ViewModifier {
+    var priority: TaskPriority
+    var action: () async -> Void
+
+    @State private var task: Task<Void, Never>?
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                task = Task(priority: priority) {
+                    await action()
+                }
             }
-        }
-        .onDisappear {
-            task?.cancel()
-            task = nil
-        }
+            .onDisappear {
+                task?.cancel()
+                task = nil
+            }
     }
 }
