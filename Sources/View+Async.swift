@@ -18,9 +18,18 @@ public extension View {
         priority: TaskPriority = .userInitiated,
         _ action: @escaping () async -> Void
     ) -> some View {
-        var task: Task<Void, Never>?
+        modifier(AsyncTaskModifier(priority: priority, action: action))
+    }
+}
 
-        return onAppear {
+private struct AsyncTaskModifier: ViewModifier {
+    
+    @State private var task: Task<Void, Never>?
+    let priority: TaskPriority
+    let action: () async -> Void
+
+    func body(content: Content) -> some View {
+        content.onAppear {
             task = Task(priority: priority) {
                 await action()
             }
