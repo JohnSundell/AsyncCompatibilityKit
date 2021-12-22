@@ -102,8 +102,14 @@ final class ViewTests: XCTestCase {
 
 private extension ViewTests {
     func showView<T: View>(_ view: T) {
+        #if os(iOS)
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = UIHostingController(rootView: view)
         window.makeKeyAndVisible()
+        #else
+        let window = NSWindow()
+        window.contentViewController = NSHostingController(rootView: view)
+        window.makeKeyAndOrderFront(nil)
+        #endif
     }
 }
