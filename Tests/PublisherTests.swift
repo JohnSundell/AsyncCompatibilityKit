@@ -8,6 +8,7 @@ import XCTest
 import Combine
 import AsyncCompatibilityKit
 
+@available(iOS 13.0, *)
 final class PublisherTests: XCTestCase {
     func testValuesFromNonThrowingPublisher() async {
         let subject = PassthroughSubject<Int, Never>()

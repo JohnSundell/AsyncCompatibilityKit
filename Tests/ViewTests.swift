@@ -9,6 +9,7 @@ import Combine
 import SwiftUI
 import AsyncCompatibilityKit
 
+@available(iOS 13.0, *)
 final class ViewTests: XCTestCase {
     private var cancellables: Set<AnyCancellable>!
 
@@ -100,6 +101,7 @@ final class ViewTests: XCTestCase {
     }
 }
 
+@available(iOS 13.0, *)
 private extension ViewTests {
     func showView<T: View>(_ view: T) {
         let window = UIWindow(frame: UIScreen.main.bounds)
