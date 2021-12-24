@@ -7,6 +7,7 @@
 import XCTest
 import AsyncCompatibilityKit
 
+@available(iOS 13.0, *)
 final class URLSessionTests: XCTestCase {
     private let session = URLSession.shared
     private let fileContents = "Hello, world!"
@@ -81,6 +82,7 @@ final class URLSessionTests: XCTestCase {
     }
 }
 
+@available(iOS 13.0, *)
 private extension URLSessionTests {
     func verifyThatError(_ error: Error, containsURL url: URL) {
         // We don't want to make too many assumptions about the
