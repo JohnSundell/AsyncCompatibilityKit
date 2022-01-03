@@ -23,27 +23,37 @@ public extension URLSession {
     ///   as well as a `URLResponse` representing the server's response.
     /// - throws: Any error encountered while performing the data task.
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
-        var dataTask: URLSessionDataTask?
-        let onCancel = { dataTask?.cancel() }
+        let sessionTask = URLSessionTaskActor()
 
-        return try await withTaskCancellationHandler(
-            handler: {
-                onCancel()
-            },
-            operation: {
-                try await withCheckedThrowingContinuation { continuation in
-                    dataTask = self.dataTask(with: request) { data, response, error in
+        return try await withTaskCancellationHandler {
+            Task { await sessionTask.cancel() }
+        } operation: {
+            try await withCheckedThrowingContinuation { continuation in
+                Task {
+                    await sessionTask.start(dataTask(with: request) { data, response, error in
                         guard let data = data, let response = response else {
                             let error = error ?? URLError(.badServerResponse)
-                            return continuation.resume(throwing: error)
+                            continuation.resume(throwing: error)
+                            return
                         }
 
                         continuation.resume(returning: (data, response))
-                    }
-
-                    dataTask?.resume()
+                    })
                 }
             }
-        )
+        }
+    }
+}
+
+private actor URLSessionTaskActor {
+    weak var task: URLSessionTask?
+
+    func start(_ task: URLSessionTask) {
+        self.task = task
+        task.resume()
+    }
+
+    func cancel() {
+        task?.cancel()
     }
 }
