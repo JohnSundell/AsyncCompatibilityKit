@@ -65,6 +65,21 @@ final class URLSessionTests: XCTestCase {
         }
     }
 
+    func testCancellingTaskCancelsDataTaskBeforeResuming() async throws {
+        let task = Task { try await session.data(from: fileURL) }
+        task.cancel()
+
+        do {
+            _ = try await task.value
+            XCTFail("Expected error to be thrown")
+        } catch let error as URLError {
+            verifyThatError(error, containsURL: fileURL)
+            XCTAssertEqual(error.code, .cancelled)
+        } catch {
+            XCTFail("Invalid error thrown: \(error)")
+        }
+    }
+
     func testCancellingParentTaskCancelsDataTask() async throws {
         let task = Task { try await session.data(from: fileURL) }
         Task { task.cancel() }

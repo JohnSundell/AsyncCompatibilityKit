@@ -24,7 +24,15 @@ public extension URLSession {
     /// - throws: Any error encountered while performing the data task.
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         var dataTask: URLSessionDataTask?
-        let onCancel = { dataTask?.cancel() }
+        var shouldCancel = false
+        let onCancel = {
+            if let dataTask = dataTask {
+                dataTask.cancel()
+            } else {
+                // if dataTask has not yet been created: do not start at all
+                shouldCancel = true
+            }
+        }
 
         return try await withTaskCancellationHandler(
             handler: {
@@ -41,7 +49,11 @@ public extension URLSession {
                         continuation.resume(returning: (data, response))
                     }
 
-                    dataTask?.resume()
+                    if shouldCancel {
+                        dataTask?.cancel()
+                    } else {
+                        dataTask?.resume()
+                    }
                 }
             }
         )
