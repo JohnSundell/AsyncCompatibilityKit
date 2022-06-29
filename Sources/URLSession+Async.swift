@@ -7,6 +7,7 @@
 import Foundation
 
 @available(iOS, deprecated: 15.0, message: "AsyncCompatibilityKit is only useful when targeting iOS versions earlier than 15")
+@available(macOS, deprecated: 12.0, message: "AsyncCompatibilityKit is only useful when targeting macOS versions earlier than 12.0")
 public extension URLSession {
     /// Start a data task with a URL using async/await.
     /// - parameter url: The URL to send a request to.
