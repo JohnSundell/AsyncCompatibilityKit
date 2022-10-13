@@ -10,7 +10,7 @@ import PackageDescription
 
 let package = Package(
     name: "AsyncCompatibilityKit",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v13), .tvOS(.v13)],
     products: [
         .library(
             name: "AsyncCompatibilityKit",
